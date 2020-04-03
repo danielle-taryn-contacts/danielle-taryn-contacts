@@ -23,8 +23,7 @@ public class ContactsApp {
     static Path contactsFilePath = Paths.get("./src/contacts_manager/" + contactsDirectory + "/" + contactsData);
 
     // Create an ArrayList to hold all contacts
-    static List<String> contactsList = new ArrayList<String>();
-
+    static List<String> contactsList = new ArrayList<>();
 
 
     // METHODS
@@ -34,8 +33,6 @@ public class ContactsApp {
         contactsList.add(new Contact(name, phone).toString());
         Files.write(contactsFilePath, contactsList);
     }
-
-
 
 
     public static void main(String[] args) throws IOException {
@@ -50,15 +47,15 @@ public class ContactsApp {
             Files.createFile(contactsFilePath);
         }
 
-
+        // read the list
+        contactsList = Files.readAllLines(contactsFilePath);
+        System.out.println(contactsList);
 
         addContact("Danielle", "2102322232");
         addContact("Taryn", "2103678024");
 
 
     }
-
-
 
 
 //    public class Main {
