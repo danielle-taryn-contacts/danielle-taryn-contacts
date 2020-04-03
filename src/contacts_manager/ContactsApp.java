@@ -6,13 +6,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
 public class ContactsApp {
 
-    // VARIABLES
+    // =================== VARIABLES =====================
 
     // Initialize variables for directory (file to hold contact info files) and database (text file holding contacts [names and phone numbers])
     static String contactsDirectory = "database"; // directory name as a variable
@@ -28,9 +27,12 @@ public class ContactsApp {
     static List<String> contactsList = new ArrayList<>();
 
 
-    // METHODS
 
-    // Method to add a new contact
+
+    // =================== METHODS =====================
+
+
+    // ------------------- ADD CONTACT --------------------
     public static void addContact(String name, String phone) throws IOException {
 
         contactsList.add(new Contact(name, phone).toString());
@@ -60,6 +62,8 @@ public class ContactsApp {
 
     public static void main(String[] args) throws IOException {
 
+
+        // ------- FILE MANAGEMENT (ADDING NECESSARY FILES) -------
         // If no directory exists at the path to our directory, make a new directory
         if (!Files.exists(contactsDirectoryPath)) {
             Files.createDirectory(contactsDirectoryPath);
@@ -70,9 +74,15 @@ public class ContactsApp {
             Files.createFile(contactsFilePath);
         }
 
+
+        // ------- SCANNER INITIALIZE -------
         Scanner scanner = new Scanner(System.in);
+
+        // ------- VARIABLE INITIALIZE -------
         boolean isRunning = true;
 
+
+        // ------- MAIN MENU LOOP -------
         while(isRunning){
 
             System.out.println("\n1. View contacts.\n" +
@@ -85,10 +95,10 @@ public class ContactsApp {
             int userInput = Integer.parseInt(scanner.nextLine()); // Parse the users input to int for the switch statement use
 
             switch(userInput){
-                case 1:
+                case 1: // view all contacts
                     viewAll();
                     break;
-                case 2:
+                case 2: // add contact
                     System.out.print("\nName: ");
                     String contactName = scanner.nextLine(); // get the users desired name
 
@@ -98,10 +108,13 @@ public class ContactsApp {
                     addContact(contactName, contactPhone);
                     System.out.println("Contact added: " + contactName + " | " + contactPhone); // let the user know that their contact was added
                     break;
-                case 3:
-                case 4:
-                case 5:
-                default:
+                case 3: // search for a contact
+                case 4: // delete chosen contact
+                case 5: // exit the contact manager
+                    isRunning = false;
+                    break;
+                default: // If the user enters a number that is out of bounds
+                    System.out.println("\nThat number is not in our system. Please enter a number from the menu.");
                     break;
 
             }
@@ -111,52 +124,5 @@ public class ContactsApp {
 
     }
 
-
-//    public class Main {
-//
-//        public static void main(String[] args) throws IOException {
-//            // test to see if a directory exist
-//            // Create it if it doesn't
-//            // create a file
-//            // crate and write to the file
-//            // Break groceries into its own file
-//            // Append to the file
-//            // read the list
-//            // Print the list
-//            // CREATE_NEW crash
-//            // TRUNCATE_EXISTING works
-//
-//            String dataPathName = "data"; // directory name as a variable
-//            String dataFileName = "data.txt"; // file name as a variable
-//
-//            Path dataPath = Paths.get(dataPathName);
-//            if (!Files.exists(dataPath)) {
-//                Files.createDirectory(dataPath);
-//            }
-//            System.out.println(Files.exists(dataPath));
-//
-//            // Create a file
-//            Path dataFilePath = Paths.get(dataPathName, dataFileName);
-////        Files.createFile(dataFilePath);
-//            String line = "Whose line is it, anyway?";
-//            Files.write(dataFilePath, Arrays.asList(line));
-//
-//            // Break groceries into its own file
-//            String groceriesFileName = "groceries.txt"; // file name as a variable
-//            Path groceriesPath = Paths.get(dataPathName, groceriesFileName);
-//            List<String> groceries = Arrays.asList("eggs", "toilet paper", "sanitizer");
-//            Files.write(groceriesPath, groceries);
-//
-//            // Append to groceries
-//            line = "tissues";
-//            Files.write(groceriesPath, Arrays.asList(line), StandardOpenOption.APPEND);
-//
-//            // read the list
-//            List<String> readList = Files.readAllLines(groceriesPath);
-//            System.out.println(readList);
-//
-//
-//        }
-//    }
 
 }

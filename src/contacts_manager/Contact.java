@@ -2,12 +2,13 @@ package contacts_manager;
 
 public class Contact {
 
-    // Create instance variables
+    // ------------------- INITIALIZE --------------------
 
     protected String name;
     protected String phoneNumber;
 
-    // Create constructor for new Contact object
+
+    // ------------------- CLASS CONSTRUCTOR --------------------
 
     public Contact(String name, String phoneNumber) {
 
@@ -16,16 +17,22 @@ public class Contact {
 
     }
 
-    // Create getter methods
+
+    // ------------------- GET (NAME) --------------------
 
     public String getName() {
         return name;
     }
 
+
+    // ------------------- GET (PHONE) --------------------
+
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
+
+    // ------------------- OVERRIDE THE toString() --------------------
     @Override
     public String toString(){
         return name + " | " + phoneNumber;
