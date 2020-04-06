@@ -79,7 +79,24 @@ public class ContactsApp {
             if (contact.toLowerCase().contains(name.toLowerCase())) // Sterilize input and the existing contacts, store anything that contains the user's input into the list
                 contactsWithName.add(contact);
         }
+
         return contactsWithName; // Return the list
+
+    }
+
+    // ------------------- DELETE --------------------
+    public static void deleteContact(String name) throws IOException{
+
+//        System.out.println("Is this the contact you would like to delete?");
+
+        List<String> contactToRemove = searchContacts(name);
+        System.out.println(contactsList);
+        contactsList.remove("Danielle Tobler");
+        printContacts(contactToRemove);
+        System.out.println(contactsList);
+        Files.write(contactsFilePath, contactsList, StandardOpenOption.TRUNCATE_EXISTING);// Put the contacts into the contact.txt file
+        System.out.println(contactsList);
+
     }
 
 
@@ -159,6 +176,9 @@ public class ContactsApp {
                     break;
 
                 case 4: // delete chosen contact
+                    System.out.println("\nWho would you like to delete?");
+                    String nameToDelete = scanner.nextLine();
+                    deleteContact(nameToDelete);
                     break;
 
                 case 5: // exit the contact manager
