@@ -89,8 +89,15 @@ public class ContactsApp {
 
         List<String> contactToRemove = searchContacts(name);
 
-        contactsList.remove(contactToRemove.get(0));
-        printContacts(contactToRemove);
+        System.out.println("Please confirm the contact to delete (enter number): ");
+        for (int i = 0; i < contactToRemove.size(); i++) {
+            System.out.println((i + 1) + ": " + contactToRemove.get(i));
+        }
+
+        int userSelection = Integer.parseInt(scanner.nextLine());
+
+        contactsList.remove(contactToRemove.get(userSelection-1));
+        System.out.println("\n" + contactToRemove.get(userSelection-1) + " was successfully deleted.");
 
         Files.write(contactsFilePath, contactsList, StandardOpenOption.TRUNCATE_EXISTING);// Put the contacts into the contact.txt file
 
@@ -121,6 +128,8 @@ public class ContactsApp {
         // ------- MAIN MENU LOOP -------
         while(isRunning){
 
+            System.out.println("\n=====================");
+
             System.out.println("\n1. View contacts.\n" +
                     "2. Add a new contact.\n" +
                     "3. Search a contact by name.\n" +
@@ -130,13 +139,16 @@ public class ContactsApp {
 
             int userInput = Integer.parseInt(scanner.nextLine()); // Parse the users input to int for the switch statement use
 
+
             switch(userInput){
 
                 case 1: // view all contacts
+                    System.out.println("\n*** ALL CONTACTS ***");
                     viewAll();
                     break;
 
                 case 2: // add contact
+                    System.out.println("\n*** ADD A CONTACT ***");
                     System.out.print("\nName: ");
                     String contactName = scanner.nextLine(); // get the users desired name
 
@@ -144,10 +156,11 @@ public class ContactsApp {
                     String contactPhone = scanner.nextLine(); // get the user desired phone number
 
                     addContact(contactName, contactPhone);
-                    System.out.println("Contact added: " + contactName + " | " + contactPhone); // let the user know that their contact was added
+                    System.out.println("\nContact added: " + contactName + " | " + contactPhone); // let the user know that their contact was added
                     break;
 
                 case 3: // search for a contact
+                    System.out.println("\n*** SEARCH ***");
                     boolean searchAgain = false; // initialize boolean to run loop if needed
                     do {
                         System.out.print("\nName of contact: "); // Ask for name of contact
@@ -173,6 +186,7 @@ public class ContactsApp {
                     break;
 
                 case 4: // delete chosen contact
+                    System.out.println("\n*** DELETE A CONTACT ***");
                     System.out.println("\nWho would you like to delete?");
                     String nameToDelete = scanner.nextLine();
                     deleteContact(nameToDelete);
