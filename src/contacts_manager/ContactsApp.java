@@ -1,13 +1,14 @@
 package contacts_manager;
 
+import org.w3c.dom.ProcessingInstruction;
+import org.w3c.dom.ls.LSOutput;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class ContactsApp {
 
@@ -29,6 +30,11 @@ public class ContactsApp {
     // Declare a contact variable to be used in addContact method
     static Contact contact;
 
+    // ------- SCANNER INITIALIZE -------
+    static Scanner scanner = new Scanner(System.in);
+
+
+
 
     // =================== METHODS =====================
 
@@ -37,11 +43,22 @@ public class ContactsApp {
     public static void addContact(String name, String phone) throws IOException {
 
         contact = new Contact(name, phone);
-        contactsList.add((contact.getName() + " | " + contact.getPhoneNumber()));
+        contactsList.add(contact.getName() + " | " + contact.getPhoneNumber());
+
         Files.write(contactsFilePath, contactsList, StandardOpenOption.TRUNCATE_EXISTING);// Put the contacts into the contact.txt file
         // TRUNCATE_EXISTING: https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/file/StandardOpenOption.html
 
     }
+
+    // ------------------- PRINT CONTACTS --------------------
+    public static void printContacts(List<String> list) {
+        System.out.println("\nName | Phone number");
+        System.out.println("---------------");
+        for (String contact : list) {
+            System.out.println(contact);
+        }
+    }
+
 
     // ------------------- VIEW ALL --------------------
     public static void viewAll() throws IOException {
@@ -50,14 +67,20 @@ public class ContactsApp {
         contactsList = Files.readAllLines(contactsFilePath);
 
         // Format the output to match the example
-        System.out.println("\nname | Phone number");
-        System.out.println("---------------");
-        for(String contact : contactsList) {
-            System.out.println(contact);
-        }
+        printContacts(contactsList);
 
     }
 
+    // ------------------- SEARCH --------------------
+    public static List<String> searchContacts(String name) {
+        List<String> contactsWithName = new ArrayList<>(); // Make new ArrayList to hold search results
+
+        for (String contact : contactsList) {
+            if (contact.toLowerCase().contains(name.toLowerCase())) // Sterilize input and the existing contacts, store anything that contains the user's input into the list
+                contactsWithName.add(contact);
+        }
+        return contactsWithName; // Return the list
+    }
 
 
     // ------------------- MAIN --------------------
@@ -76,13 +99,10 @@ public class ContactsApp {
             Files.createFile(contactsFilePath);
         }
 
-
-        // ------- SCANNER INITIALIZE -------
-        Scanner scanner = new Scanner(System.in);
-
         // ------- VARIABLE INITIALIZE -------
         boolean isRunning = true;
 
+        contactsList = Files.readAllLines(contactsFilePath);
 
         // ------- MAIN MENU LOOP -------
         while(isRunning){
@@ -92,14 +112,16 @@ public class ContactsApp {
                     "3. Search a contact by name.\n" +
                     "4. Delete an existing contact.\n" +
                     "5. Exit.\n" +
-                    "Enter an option (1, 2, 3, 4 or 5):");
+                    "Enter an option (1, 2, 3, 4 or 5): ");
 
             int userInput = Integer.parseInt(scanner.nextLine()); // Parse the users input to int for the switch statement use
 
             switch(userInput){
+
                 case 1: // view all contacts
                     viewAll();
                     break;
+
                 case 2: // add contact
                     System.out.print("\nName: ");
                     String contactName = scanner.nextLine(); // get the users desired name
@@ -110,11 +132,39 @@ public class ContactsApp {
                     addContact(contactName, contactPhone);
                     System.out.println("Contact added: " + contactName + " | " + contactPhone); // let the user know that their contact was added
                     break;
+
                 case 3: // search for a contact
+                    boolean searchAgain = false; // initialize boolean to run loop if needed
+                    do {
+                        System.out.print("\nName of contact: "); // Ask for name of contact
+                        String nameToSearch = scanner.nextLine();
+
+                        List<String> contacts = searchContacts(nameToSearch); // Create a list of contacts with names containing user input
+
+                        if (!contacts.isEmpty()) { // If the list has 1+ elements, display the contacts
+                            printContacts(contacts);
+                        } else { // If list is empty, display message below
+                            System.out.println("\nI'm sorry, a contact by that name does not exist.");
+                        }
+
+                        System.out.print("\nWould you like to search the contacts again? [y/n]: "); // prompt the user if they would like to search again
+
+                        String userConfirm = scanner.nextLine();
+                        if (userConfirm.toLowerCase().contains("y")) { // if user response contains 'y' re-run search
+                            searchAgain = true;
+                        } else { // else, do not re-run the loop
+                            searchAgain = false;
+                        }
+                    } while (searchAgain);
+                    break;
+
                 case 4: // delete chosen contact
+                    break;
+
                 case 5: // exit the contact manager
                     isRunning = false;
                     break;
+
                 default: // If the user enters a number that is out of bounds
                     System.out.println("\nThat number is not in our system. Please enter a number from the menu.");
                     break;
