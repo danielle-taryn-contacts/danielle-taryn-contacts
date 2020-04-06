@@ -87,15 +87,12 @@ public class ContactsApp {
     // ------------------- DELETE --------------------
     public static void deleteContact(String name) throws IOException{
 
-//        System.out.println("Is this the contact you would like to delete?");
-
         List<String> contactToRemove = searchContacts(name);
-        System.out.println(contactsList);
-        contactsList.remove("Danielle Tobler");
+
+        contactsList.remove(contactToRemove.get(0));
         printContacts(contactToRemove);
-        System.out.println(contactsList);
+
         Files.write(contactsFilePath, contactsList, StandardOpenOption.TRUNCATE_EXISTING);// Put the contacts into the contact.txt file
-        System.out.println(contactsList);
 
     }
 
