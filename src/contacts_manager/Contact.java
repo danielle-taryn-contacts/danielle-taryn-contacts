@@ -31,10 +31,4 @@ public class Contact {
         return phoneNumber;
     }
 
-
-    // ------------------- OVERRIDE THE toString() --------------------
-    @Override
-    public String toString(){
-        return name + " | " + phoneNumber;
-    }
 }

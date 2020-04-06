@@ -26,7 +26,8 @@ public class ContactsApp {
     // Create an ArrayList to hold all contacts
     static List<String> contactsList = new ArrayList<>();
 
-
+    // Declare a contact variable to be used in addContact method
+    static Contact contact;
 
 
     // =================== METHODS =====================
@@ -35,7 +36,8 @@ public class ContactsApp {
     // ------------------- ADD CONTACT --------------------
     public static void addContact(String name, String phone) throws IOException {
 
-        contactsList.add(new Contact(name, phone).toString());
+        contact = new Contact(name, phone);
+        contactsList.add((contact.getName() + " | " + contact.getPhoneNumber()));
         Files.write(contactsFilePath, contactsList, StandardOpenOption.TRUNCATE_EXISTING);// Put the contacts into the contact.txt file
         // TRUNCATE_EXISTING: https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/file/StandardOpenOption.html
 
